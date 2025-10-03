@@ -123,7 +123,7 @@ describe('Matchers for range', () => {
     });
 
 
-    test.only('toBeClose() test for mathematical proximity', () => {
+    test('toBeClose() test for mathematical proximity', () => {
         const a = 10.12345;
         const b = 10.12348;
         expect(a).toBeCloseTo(b);
@@ -134,6 +134,35 @@ describe('Matchers for range', () => {
 });
 
 describe('Matchers for null, undefined or NaN', () => {
+    test.only('toBeNull() test for null values', () => {
+        const a = null;
+        const b = 43;
+        expect(a).toBeNull();
+        expect(b).not.toBeNull();
+    });
+
+    test.only('toBeDefined() test if a property is undefined', () => {
+        const person = {
+            name: "John",
+            age: 32
+        }
+        expect(person.name).toBeDefined();
+    });
+
+    test.only('toBeNaN() test if a property is NaN', () => {
+        const a = Math.sqte(-25);
+        const b = Math.sqrt(25)
+        expect(a).toBeNaN();
+        expect(b).toBeNaN();
+    });
+
+    test.only('toBeNull() test for null ', () => {
+        
+    })
+
+    test.carOnSale
+
+
     
 });
 
