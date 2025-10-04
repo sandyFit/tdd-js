@@ -147,13 +147,14 @@ describe('Matchers for null, undefined or NaN', () => {
             age: 32
         }
         expect(person.name).toBeDefined();
+        expect(person.address).not.toBeDefined();
     });
 
     test.only('toBeNaN() test if a property is NaN', () => {
-        const a = Math.sqte(-25);
+        const a = Math.sqrt(-25);
         const b = Math.sqrt(25)
         expect(a).toBeNaN();
-        expect(b).toBeNaN();
+        expect(b).not.toBeNaN();
     });
 
     test.only('toBeNull() test for null ', () => {
