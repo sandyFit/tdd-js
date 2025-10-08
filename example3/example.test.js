@@ -134,14 +134,14 @@ describe('Matchers for range', () => {
 });
 
 describe('Matchers for null, undefined or NaN', () => {
-    test.only('toBeNull() test for null values', () => {
+    test('toBeNull() test for null values', () => {
         const a = null;
         const b = 43;
         expect(a).toBeNull();
         expect(b).not.toBeNull();
     });
 
-    test.only('toBeDefined() test if a property is undefined', () => {
+    test('toBeDefined() test if a property is undefined', () => {
         const person = {
             name: "John",
             age: 32
@@ -150,22 +150,54 @@ describe('Matchers for null, undefined or NaN', () => {
         expect(person.address).not.toBeDefined();
     });
 
-    test.only('toBeNaN() test if a property is NaN', () => {
+    test('toBeNaN() test if a property is NaN', () => {
         const a = Math.sqrt(-25);
-        const b = Math.sqrt(25)
+        const b = Math.sqrt(25);
         expect(a).toBeNaN();
         expect(b).not.toBeNaN();
     });
 
-    test.only('toBeNull() test for null ', () => {
-        
-    })
+    // ✅ Extra test: variable explicitly set to null
+    test('should recognize explicit null assignment', () => {
+        const car = { model: null };
+        expect(car.model).toBeNull();
+    });
 
-    test.carOnSale
+    // ✅ Extra test: undefined variable
+    test('should detect undefined variable', () => {
+        let car;
+        expect(car).toBeUndefined();
+        car = 'Tesla';
+        expect(car).toBeDefined();
+    });
 
+    // ✅ Extra test: NaN result from invalid number conversion
+    test('should detect NaN from invalid number conversion', () => {
+        const invalidNumber = Number('Hello');
+        expect(invalidNumber).toBeNaN();
+    });
 
-    
+    // ✅ Extra test: defined but null property
+    test('should distinguish between null and undefined', () => {
+        const data = { key: null };
+        expect(data.key).toBeNull();
+        expect(data.key).toBeDefined();
+    });
+
+    // ✅ Extra test: operations that don’t return NaN
+    test('should confirm valid numeric results are not NaN', () => {
+        const sum = 10 + 5;
+        expect(sum).not.toBeNaN();
+    });
+
+    // ✅ Extra test: undefined property on nested object
+    test('should handle undefined nested property safely', () => {
+        const user = { profile: { name: "Alice" } };
+        expect(user.profile.name).toBeDefined();
+        expect(user.profile.age).toBeUndefined();
+    });
 });
+
 
 describe('Matchers for truth or falsehood', () => {
     
