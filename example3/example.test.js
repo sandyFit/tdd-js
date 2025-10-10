@@ -157,13 +157,12 @@ describe('Matchers for null, undefined or NaN', () => {
         expect(b).not.toBeNaN();
     });
 
-    // ✅ Extra test: variable explicitly set to null
+    // ✅ Positive tests
     test('should recognize explicit null assignment', () => {
         const car = { model: null };
         expect(car.model).toBeNull();
     });
 
-    // ✅ Extra test: undefined variable
     test('should detect undefined variable', () => {
         let car;
         expect(car).toBeUndefined();
@@ -171,32 +170,55 @@ describe('Matchers for null, undefined or NaN', () => {
         expect(car).toBeDefined();
     });
 
-    // ✅ Extra test: NaN result from invalid number conversion
     test('should detect NaN from invalid number conversion', () => {
         const invalidNumber = Number('Hello');
         expect(invalidNumber).toBeNaN();
     });
 
-    // ✅ Extra test: defined but null property
     test('should distinguish between null and undefined', () => {
         const data = { key: null };
         expect(data.key).toBeNull();
         expect(data.key).toBeDefined();
     });
 
-    // ✅ Extra test: operations that don’t return NaN
     test('should confirm valid numeric results are not NaN', () => {
         const sum = 10 + 5;
         expect(sum).not.toBeNaN();
     });
 
-    // ✅ Extra test: undefined property on nested object
     test('should handle undefined nested property safely', () => {
         const user = { profile: { name: "Alice" } };
         expect(user.profile.name).toBeDefined();
         expect(user.profile.age).toBeUndefined();
     });
+
+    // ❌ Negative test cases — intentionally failing
+    test('FAIL: toBeNull() should fail if value is undefined', () => {
+        const x = undefined;
+        expect(x).toBeNull(); // should fail
+    });
+
+    test('FAIL: toBeUndefined() should fail if value is null', () => {
+        const y = null;
+        expect(y).toBeUndefined(); // should fail
+    });
+
+    test('FAIL: toBeNaN() should fail for valid number', () => {
+        const z = 123;
+        expect(z).toBeNaN(); // should fail
+    });
+
+    test('FAIL: not.toBeDefined() should fail for defined value', () => {
+        const message = "Hello";
+        expect(message).not.toBeDefined(); // should fail
+    });
+
+    test('FAIL: not.toBeNull() should fail for null value', () => {
+        const obj = null;
+        expect(obj).not.toBeNull(); // should fail
+    });
 });
+
 
 
 describe('Matchers for truth or falsehood', () => {
