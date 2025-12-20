@@ -416,7 +416,24 @@ describe('Matchers for errors', () => {
     /**
      *  How to test that an error has occurred
      *  We'll see how to use toThrow() and toThrowError matchers
+     *  You must enclose the code in a function, otherwise toThrow() won't 
+     *  detect the error
      */
-    
+    test('toThrow() test if a function throws an error', () => {
+        const badFunc = () => zzz + 1;
+        const goodFunc = () => 2 + 2;
+
+        expect(badFunc).toThrow();
+        expect(goodFunc).not.toThrow();
+    });
+
+    /**
+     * toThrow() takes an optional argument:
+     * - The error object is an instance of a particular class
+     * - The error message matches a specific string
+     * - The error message matches a regular expression
+     * - The error message include a substring
+     */
+
     
 });
