@@ -222,17 +222,201 @@ describe('Matchers for null, undefined or NaN', () => {
 
 
 describe('Matchers for truth or falsehood', () => {
-    
+    /**
+     *  Everything in JS is truthy except falsy values
+     *  Falsy values: false, 0, "", null, undefined, NaN
+     *  Empty objects and empting arrays are considered true but empty strings are false
+     */
+
+    test("toBeTruthy() tests for trythy values", () => {
+        const a = true;
+        const b = 43;
+        const c = 43n;
+        const d = 3.14;
+        const e = "Hello";
+        const f = {};
+        const g = [];
+
+        expect(a).toBeTruthy();
+        expect(b).toBeTruthy();
+        expect(c).toBeTruthy();
+        expect(d).toBeTruthy();
+        expect(e).toBeTruthy();
+        expect(f).toBeTruthy();
+        expect(g).toBeTruthy();
+    });
+
+    test("toBeFalsy() tests for falsy values", () => {
+        const a = false;
+        const b = 0; // or -0, 
+        const c = 0n; // or -0n
+        const d = 0.0;
+        const e = "";
+        const f = null;
+        const g = undefined;
+        const h = NaN;
+
+        expect(a).toBeFalsy();
+        expect(b).toBeFalsy();
+        expect(c).toBeFalsy();
+        expect(d).toBeFalsy();
+        expect(e).toBeFalsy();
+        expect(f).toBeFalsy();
+        expect(g).toBeFalsy();
+        expect(h).toBeFalsy();
+    });
 });
 
 describe('Matchers for object properties', () => {
+    test('test for a length property', () => {
+        const a = [10, 20, 30];
+        const b = "abcd";
+
+        expect(a).toHaveLength(3);
+        expect(b).toHaveLength(4);
+    });
+
+    test('test for an object property using dot syntax', () => {
+        /**
+         * Use toHaveProperty() to test if an object has a property
+         * Your can specify the property using dot syntax
+         */
+        const employee = {
+            name: "Trish",
+            benefits: {
+                car: { make: "Mazda", model: "6" },
+                pay: { salary: 10_000, bonus: 500 }
+            }
+        }
+        expect(employee).toHaveProperty("benefits.car.make");
+        expect(employee).toHaveProperty("benefits.pay.bonus");
+        expect(employee).not.toHaveProperty("benefits.yatch");
+    });
+
+    // You can also use the array syntax
+    test('test for an object property using array syntax', () => {
+        const product = {
+            price: { unit: 100, dozen: 1_000 },
+            category: { electronics: "cellphones" }
+        }
+        expect(product).toHaveProperty(["price", "unit"]);
+        expect(product).not.toHaveProperty(["category", "wear"]);
+    });
+
+    // You can test for an object property that's an array element
+    test("test for an object property that's an array element", () => {
+        const employee = {
+            name: "Trish",
+            benefits: {
+                car: { make: "Mazda", model: "6" },
+                pay: { salary: 10_000, bonus: 500 }
+            },
+            skills: ["JS", "TS", "C#"]
+        }
+        expect(employee).toHaveProperty(["skills", 0]);
+        expect(employee).toHaveProperty(["skills", 1]);
+        expect(employee).toHaveProperty(["skills", 2]);
+        expect(employee).not.toHaveProperty(["skills", 3]);
+    });
+
+    // You can pass in a second argument to specify the desired value
+    test('test for an object property value', () => {
+        const employee = {
+            name: "Trish",
+            benefits: {
+                car: { make: "Mazda", model: "6" },
+                pay: { salary: 10_000, bonus: 500 }
+            },
+            skills: ["JS", "TS", "C#"]
+        }
+        expect(employee).toHaveProperty("benefits.car.make", "Mazda");
+        expect(employee).toHaveProperty("benefits.car.model", "6");
+        expect(employee).toHaveProperty(["benefits", "pay", "salary"], 10_000);
+        expect(employee).toHaveProperty(["skills", 0], "JS");
+        expect(employee).not.toHaveProperty(["skills", 3], "JS");
+    });
     
 });
 
 describe('Matchers for collections', () => {
+    // npm run test -- -t collections (run all collections tests)
+    // toContain compares reference not object values
+
+    test('test for an item in an array', () => {
+        const p1 = { name: "Joan", age: 21 };
+        const p2 = { name: "John", age: 33 };
+        const p3 = { name: "Mary", age: 45 };
+        const p4 = { name: "Chris", age: 62 };
+        const p5 = { name: "Jim", age: 19 };
+
+        const people = [p1, p2, p3, p4];
+        expect(people).toContain(p1);
+        expect(people).not.toContain(p5);
+        expect(people).not.toContain({ name: "Joan", age: 21 }); // it doesn't compare object values
+
+    });
+
+    test('test for a value in an Array', () => {
+        // use toContainEqual() to test for a value in an Array
+        const p1 = { name: "Joan", age: 21 };
+        const p2 = { name: "John", age: 33 };
+        const p3 = { name: "Mary", age: 45 };
+        const p4 = { name: "Chris", age: 62 };
+        const p5 = { name: "Jim", age: 19 };
+
+        const people = [p1, p2, p3, p4];
+
+        expect(people).toContainEqual({ name: "Joan", age: 21 });
+
+    });
+
+    test('test for a key in a Map', () => {
+        /**
+         * call has() on a Map to see if it has a key
+         * Test if the result is truthy
+         */
+        const diallingCodes = new Map([
+            ["SA", "+27"],
+            ["NO", "+47"],
+            ["SG", "+65"],
+        ]);
+
+        expect(diallingCodes.has("SA")).toBeTruthy();
+        expect(diallingCodes.has("UK")).toBeFalsy();
+
+    });
     
+    test('test the value of an item in an Map', () => {
+        // Call get() on a Map, to get the value for a key
+        // Test if the result is what you expect
+        const diallingCodes = new Map([
+            ["SA", "+27"],
+            ["NO", "+47"],
+            ["SG", "+65"],
+        ]);
+
+        expect(diallingCodes.get("SG")).toBe("+65");
+        expect(diallingCodes.get("UK")).toBeUndefined();
+    });
+
+    test('test for an item in a Set', () => {
+        // Call has() on a Set to see if it has an item
+        // Test if the result is truthy
+        const countries = new Set()
+            .add("SA")
+            .add("NO")
+            .add("SG")
+
+        expect(countries.has("SG")).toBeTruthy();
+        expect(countries.has("UK")).toBeFalsy();
+    });
 });
 
 describe('Matchers for errors', () => {
+    /**
+     *  How to test that an error has occurred
+     *  We'll see how to use toThrow() and toThrowError matchers
+     */
+    
     
 });
